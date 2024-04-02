@@ -1,8 +1,7 @@
 package guessinggame;
 
-/** Tyler Normile
+/** Moinul Haq
  * Java game that allows user to guess a random numnber that has been generated.
- * @author @Tyler_N
  */
 
 import javax.swing.*;
