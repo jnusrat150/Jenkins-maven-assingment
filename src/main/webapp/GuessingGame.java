@@ -1,48 +1,50 @@
 package guessinggame;
 
-/** Moinul Haq
- * Java game that allows user to guess a random numnber that has been generated.
- */
-
 import javax.swing.*;
 
 public class GuessingGame {
-    //main method 
     public static void main(String[] args) {
-        int computerNumber = (int) (Math.random()*100 + 1); //generate random num
-        int userAnswer = 0; //initialize
-        // log correct answer to console for verification
-        System.out.println("The correct guess would be " + computerNumber);
-        int count = 1; //initialize
-        // Display input dialog until the user guesses the correct number 
-        while (userAnswer != computerNumber)
-        {
-            String response = JOptionPane.showInputDialog(null, 
-                "Enter a guess between 1 and 100", "Guessing Game", 3); // display initial input dialog to user
-            userAnswer = Integer.parseInt(response); //convert string to int for use in check method below
-            //pass userAnswer and the Compter gen number along with guess count to method
-            JOptionPane.showMessageDialog(null, ""+ determineGuess(userAnswer, computerNumber, count)); 
-            count++; //increment number of tries for each attempt
-        }  
+        int computerNumber = (int) (Math.random() * 100 + 1);
+        int userAnswer = 0;
+        int count = 1;
+        int maxAttempts = 10;
+
+        while (userAnswer != computerNumber && count <= maxAttempts) {
+            String response = JOptionPane.showInputDialog(null,
+                    "Enter a guess between 1 and 100 or type 'exit' to quit.", "Guessing Game", 3); // display input dialog
+
+            if ("exit".equalsIgnoreCase(response)) {
+                JOptionPane.showMessageDialog(null, "Game exited. The correct number was " + computerNumber);
+                return;
+            }
+
+            try {
+                userAnswer = Integer.parseInt(response); 
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Please enter a valid integer or 'exit' to quit.");
+                continue;
+            }
+
+            // Check the guess and display result or hint
+            JOptionPane.showMessageDialog(null, "" + determineGuess(userAnswer, computerNumber, count));
+            count++;
+        }
+
+        if (count > maxAttempts) {
+            JOptionPane.showMessageDialog(null, "You've reached the maximum attempts. The correct number was " + computerNumber + ".");
+        }
     }
-    
-    //Determine guess function to check how close number is to generated number and display try count
-    public static String determineGuess(int userAnswer, int computerNumber, int count){
-        if (userAnswer <=0 || userAnswer >100) {
-            return "Your guess is invalid";
-        }
-        else if (userAnswer == computerNumber ){
+
+    // Determine guess function
+    public static String determineGuess(int userAnswer, int computerNumber, int count) {
+        if (userAnswer <= 0 || userAnswer > 100) {
+            return "Your guess is invalid.";
+        } else if (userAnswer == computerNumber) {
             return "Correct!\nTotal Guesses: " + count;
-        }
-        else if (userAnswer > computerNumber) {
+        } else if (userAnswer > computerNumber) {
             return "Your guess is too high, try again.\nTry Number: " + count;
-        }
-        else if (userAnswer < computerNumber) {
+        } else {
             return "Your guess is too low, try again.\nTry Number: " + count;
-        }
-        else {
-            return "Your guess is incorrect\nTry Number: " + count;
-            
         }
     }
 }
